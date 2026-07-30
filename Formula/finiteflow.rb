@@ -20,7 +20,6 @@ class Finiteflow < Formula
 
     system "cmake", "-S", ".", "-B", "build",
            *std_cmake_args,
-           "-DFFLOW_MATHEMATICA=ON",
            "-DMATHLIBINSTALL=#{pkgshare}/Mathematica",
            # See https://github.com/peraro/finiteflow/issues/6.
            "-DFFLOW_USE_FLINT=OFF",
