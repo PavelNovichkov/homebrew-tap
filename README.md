@@ -1,4 +1,4 @@
-# PavelNovichkov Tap
+# My personal Homebrew tap
 
 ## How do I install these formulae?
 
