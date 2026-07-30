@@ -1,13 +1,13 @@
 class Finiteflow < Formula
-  desc "Multivariate functional reconstruction using finite fields and dataflow graphs."
+  desc "Multivariate functional reconstruction using finite fields and dataflow graphs"
   homepage "https://github.com/peraro/finiteflow"
   url "https://github.com/peraro/finiteflow/archive/8761419b506114656f8eacf5194b9820afae0d48.tar.gz"
   version "20260709"
   sha256 "17eb3533a60dd09e8f48edcaa3d8ab8da940caef9a96eab543fb0dddebbc2538"
   license "MIT"
 
-  depends_on "cffi"
   depends_on "cmake" => :build
+  depends_on "cffi"
   depends_on "gmp"
 
   # Expose the user's environment in order to build the Mathematica interface,
