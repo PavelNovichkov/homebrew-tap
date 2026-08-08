@@ -1,9 +1,9 @@
 class Finiteflow < Formula
   desc "Multivariate functional reconstruction using finite fields and dataflow graphs"
   homepage "https://github.com/peraro/finiteflow"
-  url "https://github.com/peraro/finiteflow/archive/8761419b506114656f8eacf5194b9820afae0d48.tar.gz"
-  version "20260709"
-  sha256 "17eb3533a60dd09e8f48edcaa3d8ab8da940caef9a96eab543fb0dddebbc2538"
+  url "https://github.com/peraro/finiteflow/archive/b951bf7361643292ae3846383281e5f4626dad78.tar.gz"
+  version "20260808"
+  sha256 "d37cb0837d7f455f72f27c41c8b9bfa78e684a10746d60815fedee73fd75c54f"
   license "MIT"
 
   depends_on "cmake" => :build
