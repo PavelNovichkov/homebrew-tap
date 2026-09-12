@@ -6,6 +6,12 @@ class GitCredentialGopass < Formula
   license "MIT"
   head "https://github.com/gopasspw/git-credential-gopass.git", branch: "master"
 
+  bottle do
+    root_url "https://ghcr.io/v2/pavelnovichkov/tap"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:  "0b22c2a4b0d13eeee0ba5ddaf41e9caaf8f16c4bcae829dad7bc7e150b51427d"
+    sha256 cellar: :any,                 x86_64_linux: "27a17ec2c015f95a268892c858643246c3a82087fde8a6ce5a5d9f8c4ba53957"
+  end
+
   depends_on "go" => :build
   depends_on "gopass"
 
