@@ -6,6 +6,11 @@ class Finiteflow < Formula
   sha256 "d37cb0837d7f455f72f27c41c8b9bfa78e684a10746d60815fedee73fd75c54f"
   license "MIT"
 
+  # This formula tracks specific commits rather than upstream releases.
+  livecheck do
+    skip "Tracks specific commits"
+  end
+
   depends_on "cmake" => :build
   depends_on "cffi"
   depends_on "gmp"
