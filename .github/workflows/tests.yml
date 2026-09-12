@@ -1,3 +1,4 @@
+# brew tap-new uses this file to generate a PR test workflow for the new tap
 name: brew test-bot
 
 on:
@@ -6,11 +7,17 @@ on:
       - main
   pull_request:
 
+permissions: {}
+
+defaults:
+  run:
+    shell: bash -xeuo pipefail {0}
+
 jobs:
   test-bot:
     strategy:
       matrix:
-        os: [ macos-15-intel, macos-26 ]
+        os: [ macos-26 ]
         include:
           - os: ubuntu-latest
             container:
@@ -22,6 +29,7 @@ jobs:
       actions: read
       checks: read
       contents: read
+      packages: read
       pull-requests: read
     steps:
       - name: Set up Homebrew
@@ -42,8 +50,19 @@ jobs:
       - run: brew test-bot --only-setup
 
       - run: brew test-bot --only-tap-syntax
-      - run: brew test-bot --only-formulae
+      - name: Base64-encode GITHUB_TOKEN for HOMEBREW_DOCKER_REGISTRY_TOKEN
+        id: base64-encode
         if: github.event_name == 'pull_request'
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          base64_token=$(echo -n "${TOKEN}" | base64 | tr -d "\n")
+          echo "::add-mask::${base64_token}"
+          echo "token=${base64_token}" >> "${GITHUB_OUTPUT}"
+      - run: brew test-bot --only-formulae --root-url=https://ghcr.io/v2/pavelnovichkov/test-tap
+        if: github.event_name == 'pull_request'
+        env:
+          HOMEBREW_DOCKER_REGISTRY_TOKEN: ${{ steps.base64-encode.outputs.token }}
 
       - name: Upload bottles as artifact
         if: always() && github.event_name == 'pull_request'
