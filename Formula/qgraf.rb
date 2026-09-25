@@ -24,6 +24,9 @@ class Qgraf < Formula
 
   def caveats
     <<~EOS
+      QGRAF may only be used for academic research and teaching; see
+        https://qgraf.ist.utl.pt/~paulo/ld.html
+
       Example models and styles are installed to:
         #{opt_pkgshare}/models
         #{opt_pkgshare}/styles
