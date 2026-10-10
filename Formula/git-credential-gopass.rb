@@ -1,8 +1,8 @@
 class GitCredentialGopass < Formula
   desc "Git credential helper that stores credentials in gopass"
   homepage "https://github.com/gopasspw/git-credential-gopass"
-  url "https://github.com/gopasspw/git-credential-gopass/archive/refs/tags/v1.17.3.tar.gz"
-  sha256 "5b5d017234eb59c153ec29b6ea3dcec78e12934a344c519e4bb90cadafbe75a8"
+  url "https://github.com/gopasspw/git-credential-gopass/archive/refs/tags/v1.17.4.tar.gz"
+  sha256 "115d1a10dc5356f094b6159cc346d81e2f4abae55c1ad03b697f2427e68b748f"
   license "MIT"
   head "https://github.com/gopasspw/git-credential-gopass.git", branch: "master"
 
