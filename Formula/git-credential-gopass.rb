@@ -18,4 +18,35 @@ class GitCredentialGopass < Formula
   def install
     system "go", "build", *std_go_args(ldflags: "-X main.version=#{version}")
   end
+
+  test do
+    (testpath/"batch.gpg").write <<~GPG
+      Key-Type: RSA
+      Name-Real: Testing
+      Name-Email: testing@foo.bar
+      %no-protection
+      %transient-key
+      %commit
+    GPG
+
+    begin
+      system formula_opt_bin("gnupg")/"gpg", "--batch", "--gen-key", "batch.gpg"
+      system formula_opt_bin("gopass")/"gopass", "init", "--path", testpath/"store", "testing@foo.bar"
+
+      pipe_output("#{bin}/git-credential-gopass store", <<~EOS, 0)
+        protocol=https
+        host=example.com
+        username=user
+        password=secret
+      EOS
+      credential = pipe_output("#{bin}/git-credential-gopass get", <<~EOS, 0)
+        protocol=https
+        host=example.com
+      EOS
+    ensure
+      system formula_opt_bin("gnupg")/"gpgconf", "--kill", "gpg-agent"
+    end
+
+    assert_match "password=secret", credential
+  end
 end
