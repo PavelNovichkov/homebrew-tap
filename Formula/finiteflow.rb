@@ -35,4 +35,29 @@ class Finiteflow < Formula
 
     (pkgshare/"Mathematica").install "mathlink/FiniteFlow.m"
   end
+
+  test do
+    (testpath/"test.c").write <<~C
+      #include <fflow/capi.h>
+      #include <stdio.h>
+
+      int main(void)
+      {
+        FFCStr vars[] = {"x", "y"};
+        FFCStr functions[] = {"(1+x)/(1+y)"};
+        FFNode input;
+        FFGraph graph = ffNewGraphWithInput(2, &input);
+        FFRatFunList * parsed = ffParseRatFun(vars, 2, functions, 1);
+        ffSetOutputNode(graph, ffAlgRatFunEval(graph, input, parsed));
+
+        FFRatFunList * reconstructed;
+        if (ffReconstructFunction(graph, (FFRecOptions){0}, &reconstructed) != FF_SUCCESS)
+          return 1;
+        puts(ffRatFunToStr(reconstructed, 0, vars));
+        return 0;
+      }
+    C
+    system ENV.cc, "test.c", "-I#{include}", "-L#{lib}", "-lfflow", "-o", "test"
+    assert_equal "( 1*x+1 )/( 1*y+1 )", shell_output("./test").chomp
+  end
 end
