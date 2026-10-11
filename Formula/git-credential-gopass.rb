@@ -8,8 +8,8 @@ class GitCredentialGopass < Formula
 
   bottle do
     root_url "https://ghcr.io/v2/pavelnovichkov/tap"
-    sha256 cellar: :any_skip_relocation, arm64_tahoe:  "6be130d1707fee1e72be3e4a14bb9964d908f19ab42220d02b48c0478bccdd24"
-    sha256 cellar: :any,                 x86_64_linux: "6ee889fac193fa3c4d08e344ffb65fcd19958216bfcd14e1a69ffc9183c675b2"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe:  "591e54dd63d0457901d5a5ab3f050efe349c7f2d4872e4b40b2bde0695b7690c"
+    sha256 cellar: :any,                 x86_64_linux: "cdd2a1105a760eea9a4451a713bc68bcb493061391f76296f228f2c20d373560"
   end
 
   depends_on "go" => :build
