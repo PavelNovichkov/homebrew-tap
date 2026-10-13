@@ -36,6 +36,29 @@ jobs:
         id: git_setup
         uses: Homebrew/actions/git-user-config@e99025eb970cfa124b8284a35463d87426917478 # 2026.09.28.1
 
+      # `tests.yml` drops the bottles of formulae declining them with
+      # `pour_bottle?`; `brew pr-pull` skips artifacts for `CI-no-bottles`.
+      - name: Label pull request without bottles
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HEAD_SHA: ${{ inputs.head_sha }}
+          PULL_REQUEST: ${{ inputs.pull_request }}
+        run: |
+          head_sha="${HEAD_SHA:-$(gh pr view "$PULL_REQUEST" --repo "$GITHUB_REPOSITORY" --json headRefOid --jq .headRefOid)}"
+          run_id="$(gh run list --repo "$GITHUB_REPOSITORY" --workflow tests.yml --commit "$head_sha" \
+                      --status success --json databaseId --jq '.[0].databaseId')"
+          if [[ -z "$run_id" ]]
+          then
+            echo "::error::No successful tests.yml run for ${head_sha}."
+            exit 1
+          fi
+          bottles="$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$run_id/artifacts" \
+                       --jq '[.artifacts[].name | select(startswith("bottles"))] | length')"
+          if [[ "$bottles" == 0 ]]
+          then
+            gh pr edit "$PULL_REQUEST" --repo "$GITHUB_REPOSITORY" --add-label CI-no-bottles
+          fi
+
       - name: Pull bottles
         env:
           HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}

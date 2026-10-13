@@ -64,6 +64,21 @@ jobs:
         env:
           HOMEBREW_DOCKER_REGISTRY_TOKEN: ${{ steps.base64-encode.outputs.token }}
 
+      - name: Remove bottles of formulae declining them with `pour_bottle?`
+        if: always() && github.event_name == 'pull_request'
+        run: |
+          brew ruby -e '
+            Dir["*.bottle.json"].each do |json|
+              JSON.parse(File.read(json)).each_key do |name|
+                formula = Formula[name]
+                next if formula.pour_bottle?
+
+                puts "Not uploading #{name} bottles: #{formula.pour_bottle_check_unsatisfied_reason}"
+                FileUtils.rm Dir["#{json.delete_suffix(".json")}.*"]
+              end
+            end
+          '
+
       - name: Upload bottles as artifact
         if: always() && github.event_name == 'pull_request'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
