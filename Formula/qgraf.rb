@@ -13,6 +13,11 @@ class Qgraf < Formula
     regex(/href=.*?qgraf[._-]v?(\d+(?:\.\d+){2})\.t/i)
   end
 
+  pour_bottle? do
+    reason "The QGRAF licence does not permit redistribution, including bottles."
+    satisfy { false }
+  end
+
   depends_on "gcc" # for gfortran
 
   def install
